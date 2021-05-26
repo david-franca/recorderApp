@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let isRecording = false;
   let selectDeviceId = null;
   let mediaRecorder = null;
+  let startTime = 0;
   let chunks = [];
 
   navigator.mediaDevices.enumerateDevices().then((devices) => {
@@ -58,6 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((stream) => {
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
+          startTime = Date.now();
+          updateDisplay();
           mediaRecorder.ondataavailable = (event) => {
             chunks.push(event.data);
           };
@@ -71,7 +74,28 @@ document.addEventListener("DOMContentLoaded", () => {
   function saveData() {
     const blob = new Blob(chunks, { type: "audio/webm; codecs=opus" });
     console.log("Blob =>", blob);
+    // document.querySelector("#audio").src = URL.createObjectURL(blob);
     chunks = [];
+  }
+
+  function updateDisplay() {
+    display.innerHTML = durationTimestamp(Date.now() - startTime);
+    if (isRecording) {
+      window.requestAnimationFrame(updateDisplay);
+    }
+  }
+
+  function durationTimestamp(duration) {
+    let milliseconds = parseInt((duration % 1000) / 100);
+    let seconds = Math.floor((duration / 1000) % 60);
+    let minutes = Math.floor((duration / 1000 / 60) % 60);
+    let hours = Math.floor(duration / 1000 / 60 / 60);
+
+    hours = hours < 10 ? "0" + hours : hours;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    return `${hours}:${minutes}:${seconds}.${milliseconds}`;
   }
 });
 

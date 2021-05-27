@@ -1,4 +1,11 @@
-const { app, BrowserWindow, ipcMain, Menu, shell } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  shell,
+  dialog,
+} = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -109,4 +116,12 @@ ipcMain.on("openNewWindow", () => {
 ipcMain.on("save_buffer", (e, buffer) => {
   const filePath = path.join(destination, `${Date.now()}`);
   fs.writeFileSync(`${filePath}.webm`, buffer);
+});
+
+ipcMain.handle("show-dialog", async (e) => {
+  const { filePaths } = await dialog.showOpenDialog({
+    properties: ["openDirectory"],
+  });
+  destination = filePaths[0];
+  return destination;
 });

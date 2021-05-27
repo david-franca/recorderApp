@@ -9,6 +9,33 @@ const isDev = process.env.NODE_ENV === "development" ? true : false;
 
 const isMac = process.platform === "darwin" ? true : false;
 
+function createPreferenceWindow() {
+  const preferenceWindow = new BrowserWindow({
+    width: isDev ? 950 : 500,
+    height: 150,
+    backgroundColor: "#234",
+    resizable: isDev ? true : false,
+    show: false,
+    icon: path.join(__dirname, "src", "assets", "icons", "icon.png"),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+
+  preferenceWindow.loadFile(
+    path.join(__dirname, "./src/pages/preferences/index.html")
+  );
+
+  if (isDev) {
+    preferenceWindow.webContents.openDevTools();
+  }
+
+  preferenceWindow.once("ready-to-show", () => {
+    preferenceWindow.show();
+  });
+}
+
 function createWindow() {
   const win = new BrowserWindow({
     width: isDev ? 950 : 500,
@@ -40,7 +67,7 @@ function createWindow() {
         submenu: [
           {
             label: "Preferências",
-            click: () => {},
+            click: () => createPreferenceWindow(),
           },
           {
             label: "Abrir pasta de destino",

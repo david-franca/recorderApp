@@ -5,12 +5,27 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dev": "SET NODE_ENV=development&& electron ."
+    "dev": "SET NODE_ENV=development&& electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
-  "author": "David F",
+  "author": "David Franca",
   "license": "MIT",
+  "build": {
+    "appId": "com.david.recorder",
+    "win": {
+      "icon": "./src/assets/icons/icon.png"
+    },
+    "mac": {
+      "icon": "./src/assets/icons/icon.png"
+    },
+    "linux": {
+      "icon": "./src/assets/icons/icon.png"
+    }
+  },
   "devDependencies": {
-    "electron": "^12.0.9"
+    "electron": "^12.0.9",
+    "electron-builder": "^22.10.5"
   },
   "dependencies": {}
 }

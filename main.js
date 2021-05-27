@@ -27,12 +27,13 @@ function createPreferenceWindow() {
     path.join(__dirname, "./src/pages/preferences/index.html")
   );
 
-  if (isDev) {
-    preferenceWindow.webContents.openDevTools();
-  }
-
   preferenceWindow.once("ready-to-show", () => {
     preferenceWindow.show();
+    if (isDev) {
+      preferenceWindow.webContents.openDevTools();
+    }
+
+    preferenceWindow.webContents.send("dest-path-update", destination);
   });
 }
 

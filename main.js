@@ -1,6 +1,9 @@
-const { app, BrowserWindow, ipcMain, Menu } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, shell } = require("electron");
 const path = require("path");
 const os = require("os");
+const fs = require("fs");
+
+let destination = path.join(os.homedir(), "Audios");
 
 const isDev = process.env.NODE_ENV === "development" ? true : false;
 
@@ -41,7 +44,7 @@ function createWindow() {
           },
           {
             label: "Abrir pasta de destino",
-            click: () => {},
+            click: () => shell.openPath(destination),
           },
         ],
       },
@@ -73,4 +76,9 @@ app.on("activate", () => {
 
 ipcMain.on("openNewWindow", () => {
   createWindow();
+});
+
+ipcMain.on("save_buffer", (e, buffer) => {
+  const filePath = path.join(destination, `${Date.now()}`);
+  fs.writeFileSync(`${filePath}.webm`, buffer);
 });

@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const { ipcRenderer } = require("electron");
   const display = document.querySelector("#display");
   const record = document.querySelector("#record");
   const micInput = document.querySelector("#mic");
@@ -74,6 +75,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function saveData() {
     const blob = new Blob(chunks, { type: "audio/webm; codecs=opus" });
     console.log("Blob =>", blob);
+    blob.arrayBuffer().then((blobBuffer) => {
+      const buffer = Buffer.from(blobBuffer, "binary");
+      ipcRenderer.send("save_buffer", buffer);
+    });
     // document.querySelector("#audio").src = URL.createObjectURL(blob);
     chunks = [];
   }

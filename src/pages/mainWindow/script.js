@@ -74,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function saveData() {
     const blob = new Blob(chunks, { type: "audio/webm; codecs=opus" });
-    console.log("Blob =>", blob);
     blob.arrayBuffer().then((blobBuffer) => {
       const buffer = Buffer.from(blobBuffer, "binary");
       ipcRenderer.send("save_buffer", buffer);

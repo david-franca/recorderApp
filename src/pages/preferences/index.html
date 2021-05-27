@@ -2,9 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline'"
+    />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../styles/style.css" />
     <title>Preferências</title>
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <div class="group">
+        <label for="dest-path"> Caminho de destino: </label>
+        <input id="dest-path" name="dest-path" type="text" />
+        <button>Alterar</button>
+      </div>
+    </div>
+  </body>
 </html>

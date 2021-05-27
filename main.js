@@ -9,8 +9,16 @@ const {
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
+const Store = require("./Store");
 
-let destination = path.join(os.homedir(), "Audios");
+const preferences = new Store({
+  configName: "user-preferences",
+  defaults: {
+    destination: path.join(os.homedir(), "Audios"),
+  },
+});
+
+let destination = preferences.get("destination");
 
 const isDev = process.env.NODE_ENV === "development" ? true : false;
 
@@ -122,6 +130,8 @@ ipcMain.handle("show-dialog", async (e) => {
   const { filePaths } = await dialog.showOpenDialog({
     properties: ["openDirectory"],
   });
-  destination = filePaths[0];
+  const dirPath = filePaths[0];
+  preferences.set("destination", dirPath);
+  destination = preferences.get("destination");
   return destination;
 });
